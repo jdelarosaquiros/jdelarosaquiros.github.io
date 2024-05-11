@@ -165,9 +165,10 @@
         <div class="content has-text-justified">
           <p>
             Since we cannot exactly train large language models (LLM) every time we get new data, we need a way to provide it with new information without re-training the model. One way of doing this is to include that new information in the prompt of the model and tell the model to use that information to answer the question in the prompt. This is what we call RAG – Retrieval Augmented Generation – where we retrieve documents add them to the prompt and give an instruction to use them as context for the answer. However, would you stake your life on the LLM only using the information provided in the documents?
+          </p>
+          <img src="static/images/hallucination_example.png" alt="Recovering the Pre-Fine-Tuning Weight of an Aligned Mistral 7B" class="blend-img-background center-image">
+          <p>
             I bet you and most of the people reading this article answered “No” to that question. If you’ve used any LLMs before, you probably know about their tendency to confidently state false facts or talk about some random topic not related to your question, even the best models are not immune to this behavior. In this blog, I will talk about ways to combat this problem. More specifically, I will show a method that guarantees attribution of the exact text used to generate an answer and also evaluates its own answer, so you can better decide whether to trust the answer or not.
-
-            <img src="static/images/hallucination_example.png" alt="Recovering the Pre-Fine-Tuning Weight of an Aligned Mistral 7B" class="blend-img-background center-image">
           </p>
         </div>
       </div>
