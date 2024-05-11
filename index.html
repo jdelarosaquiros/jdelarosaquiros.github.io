@@ -25,7 +25,7 @@
 
 
   <title>Perfect Attribution and Enhanced Factuality</title>
-  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+<!--   <link rel="icon" type="image/x-icon" href="static/images/favicon.ico"> -->
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
   rel="stylesheet">
 
@@ -176,6 +176,7 @@
   </div>
 </section>
 
+
 <section class="section hero small">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
@@ -185,10 +186,32 @@
             Now, let’s define attribution more formally. In short, it refers to the capacity of a model to provide evidence as references or citations of the statements it produces. The primary purpose of attribution is enabling users to validate the claims made by the model. The standard way of retrieving and citing references is to assign each reference a number, combine them all in the prompt, and instruct the model to cite them by appending their respective number after using them. However, this method has some drawbacks:
           </p>
           <img src="static/images/standard_rag.png" alt="Standard RAG" class="blend-img-background center-image">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  
+<section class="section hero small">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <div class="content has-text-justified">
           <p>
             As you can observe in the figure above, standard RAG has two problems. One is that it includes all documents retrieved even if those documents are irrelevant. The other problem is that its citations are not accurate or precise. A popular way of dealing with this problem is to instruct-tune models along with retrieved documents, and research has shown that this method is effective at increasing the performance of the model. Having said that, for the same reason we cannot trust LLMs to always give us the right answer, we cannot trust them to always cite references correctly. Even if they do it correctly more often, they will make a mistake sooner or later. Hence, I will introduce a framework called Self-Reflective Retrieval-Augmented Gen- eration (SELF-RAG) that doesn’t rely on the model to cite references. Instead, it generates a different answer for each reference, and at the end, it selects the best answer. Since each answer only uses one reference, we won’t have to guess which reference the model used to answer the question. If the question couldn’t be answer using one source, it would keep repeating this process until its answer is complete. 
           </p>
           <img src="static/images/self_rag.png" alt="SELF-RAG" class="blend-img-background center-image">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section hero small">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <div class="content has-text-justified">
           <p>
             The most important part of this framework is the generation of reflection tokens which are used to rank and select the answers. Without them, the model cannot reliably compare the generated texts, and simply comparing the overall probability of the text doesn’t help much.
           </p>
@@ -199,22 +222,36 @@
   </div>
 </section>
 
-  <section class="section hero small">
+<section class="section hero small">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-full">
         <div class="content has-text-justified">
           <p>
-            Since reflection tokens are the heart of SELF-RAG, let’s discuss them in more detail. There are a total of four tokens. The first token the SELF-RAG predicts is the retrieve token to decide whether the question requires information from external documents or not. The main purpose of this token is to maximize the creativity on the when the task doesn’t external knowledge to answer the question. Some examples of this type of task are writing a story, performing a mathematical operation, or using logic to answer. In these cases, including documents in the prompt will probably hurt the fluency of the answer. The other three tokens predict the relevancy of the document to the question, the amount of support the document provides the answer, and the level of usefulness of the answer to the question. The framework uses these three tokens to score and rank the answers. They can also be used to filter undesirable predictions, such as the ones generated using an irrelevant document or the ones not supported by its document.          </p>
+            Since reflection tokens are the heart of SELF-RAG, let’s discuss them in more detail. There are a total of four tokens. The first token the SELF-RAG predicts is the retrieve token to decide whether the question requires information from external documents or not. The main purpose of this token is to maximize the creativity on the when the task doesn’t external knowledge to answer the question. Some examples of this type of task are writing a story, performing a mathematical operation, or using logic to answer. In these cases, including documents in the prompt will probably hurt the fluency of the answer. The other three tokens predict the relevancy of the document to the question, the amount of support the document provides the answer, and the level of usefulness of the answer to the question. The framework uses these three tokens to score and rank the answers. They can also be used to filter undesirable predictions, such as the ones generated using an irrelevant document or the ones not supported by its document.
+          </p>
           <img src="static/images/reflection_tokens.png" alt="Standard RAG" class="blend-img-background center-image">
-          <p>
-            As for how exactly the score is calculated, it basically combines the probabilities of all three tokens to create something akin to a confidence score of the answer. Since the score is based on the probabilities of the tokens, most if not all answers will have a different score even if their reflection tokens are the same. In my experience, this method provides a fairly accurate assessment of the generation because the probabilities of these tokens tend to be higher when the model knows the answer, and they are usually lower when the model is unsure or hallucinates. Also, this score does not have a high correlation with the overall probability of the generated tokens. During my experiments, I found that the overall probability of the generated tokens wasn’t an accurate indicator of the quality of answer, and it led to a much lower performance.          </p>
-          <img src="static/images/score_calculation.png" alt="SELF-RAG" class="blend-img-background center-image">
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<section class="section hero small">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <div class="content has-text-justified">
+          <p>
+            As for how exactly the score is calculated, it basically combines the probabilities of all three tokens to create something akin to a confidence score of the answer. Since the score is based on the probabilities of the tokens, most if not all answers will have a different score even if their reflection tokens are the same. In my experience, this method provides a fairly accurate assessment of the generation because the probabilities of these tokens tend to be higher when the model knows the answer, and they are usually lower when the model is unsure or hallucinates. Also, this score does not have a high correlation with the overall probability of the generated tokens. During my experiments, I found that the overall probability of the generated tokens wasn’t an accurate indicator of the quality of answer, and it led to a much lower performance.         
+          </p>
+          <img src="static/images/score_calculation.png" alt="SELF-RAG" class="blend-img-background center-image" width="600">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  
 <!-- End paper abstract -->
 <!--   <div class="level-set has-text-justified">
             <p>
