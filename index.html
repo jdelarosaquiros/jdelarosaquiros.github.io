@@ -52,7 +52,7 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">Academic Project Page</h1>
+            <h1 class="title is-1 publication-title">Perfect Attribution and Enhanced Factuality</h1>
 <!--             <div class="is-size-5 publication-authors"> -->
               <!-- Paper authors -->
 <!--               <span class="author-block">
@@ -166,10 +166,50 @@
           <p>
             Since we cannot exactly train large language models (LLM) every time we get new data, we need a way to provide it with new information without re-training the model. One way of doing this is to include that new information in the prompt of the model and tell the model to use that information to answer the question in the prompt. This is what we call RAG – Retrieval Augmented Generation – where we retrieve documents add them to the prompt and give an instruction to use them as context for the answer. However, would you stake your life on the LLM only using the information provided in the documents?
           </p>
-          <img src="static/images/hallucination_example.png" alt="Recovering the Pre-Fine-Tuning Weight of an Aligned Mistral 7B" class="blend-img-background center-image">
           <p>
             I bet you and most of the people reading this article answered “No” to that question. If you’ve used any LLMs before, you probably know about their tendency to confidently state false facts or talk about some random topic not related to your question, even the best models are not immune to this behavior. In this blog, I will talk about ways to combat this problem. More specifically, I will show a method that guarantees attribution of the exact text used to generate an answer and also evaluates its own answer, so you can better decide whether to trust the answer or not.
           </p>
+          <img src="static/images/hallucination_example.png" alt="Examples of Hallucination" class="blend-img-background center-image">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section hero small">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <div class="content has-text-justified">
+          <p>
+            Now, let’s define attribution more formally. In short, it refers to the capacity of a model to provide evidence as references or citations of the statements it produces. The primary purpose of attribution is enabling users to validate the claims made by the model. The standard way of retrieving and citing references is to assign each reference a number, combine them all in the prompt, and instruct the model to cite them by appending their respective number after using them. However, this method has some drawbacks:
+          </p>
+          <img src="static/images/standard_rag.png" alt="Standard RAG" class="blend-img-background center-image">
+          <p>
+            As you can observe in the figure above, standard RAG has two problems. One is that it includes all documents retrieved even if those documents are irrelevant. The other problem is that its citations are not accurate or precise. A popular way of dealing with this problem is to instruct-tune models along with retrieved documents, and research has shown that this method is effective at increasing the performance of the model. Having said that, for the same reason we cannot trust LLMs to always give us the right answer, we cannot trust them to always cite references correctly. Even if they do it correctly more often, they will make a mistake sooner or later. Hence, I will introduce a framework called Self-Reflective Retrieval-Augmented Gen- eration (SELF-RAG) that doesn’t rely on the model to cite references. Instead, it generates a different answer for each reference, and at the end, it selects the best answer. Since each answer only uses one reference, we won’t have to guess which reference the model used to answer the question. If the question couldn’t be answer using one source, it would keep repeating this process until its answer is complete. 
+          </p>
+          <img src="static/images/self_rag.png" alt="SELF-RAG" class="blend-img-background center-image">
+          <p>
+            The most important part of this framework is the generation of reflection tokens which are used to rank and select the answers. Without them, the model cannot reliably compare the generated texts, and simply comparing the overall probability of the text doesn’t help much.
+          </p>
+          <img src="static/images/other_llms.png" alt="Without Reflection Tokens" class="blend-img-background center-image">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section class="section hero small">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <div class="content has-text-justified">
+          <p>
+            Since reflection tokens are the heart of SELF-RAG, let’s discuss them in more detail. There are a total of four tokens. The first token the SELF-RAG predicts is the retrieve token to decide whether the question requires information from external documents or not. The main purpose of this token is to maximize the creativity on the when the task doesn’t external knowledge to answer the question. Some examples of this type of task are writing a story, performing a mathematical operation, or using logic to answer. In these cases, including documents in the prompt will probably hurt the fluency of the answer. The other three tokens predict the relevancy of the document to the question, the amount of support the document provides the answer, and the level of usefulness of the answer to the question. The framework uses these three tokens to score and rank the answers. They can also be used to filter undesirable predictions, such as the ones generated using an irrelevant document or the ones not supported by its document.          </p>
+          <img src="static/images/reflection_tokens.png" alt="Standard RAG" class="blend-img-background center-image">
+          <p>
+            As for how exactly the score is calculated, it basically combines the probabilities of all three tokens to create something akin to a confidence score of the answer. Since the score is based on the probabilities of the tokens, most if not all answers will have a different score even if their reflection tokens are the same. In my experience, this method provides a fairly accurate assessment of the generation because the probabilities of these tokens tend to be higher when the model knows the answer, and they are usually lower when the model is unsure or hallucinates. Also, this score does not have a high correlation with the overall probability of the generated tokens. During my experiments, I found that the overall probability of the generated tokens wasn’t an accurate indicator of the quality of answer, and it led to a much lower performance.          </p>
+          <img src="static/images/score_calculation.png" alt="SELF-RAG" class="blend-img-background center-image">
         </div>
       </div>
     </div>
@@ -191,13 +231,13 @@
         </div> -->
 
 <!-- Image carousel -->
-<section class="hero is-small">
+<!-- <section class="hero is-small">
   <div class="hero-body">
     <div class="container">
       <div id="results-carousel" class="carousel results-carousel">
-       <div class="item">
+       <div class="item"> -->
         <!-- Your image here -->
-        <img src="static/images/carousel1.jpg" alt="MY ALT TEXT"/>
+<!--         <img src="static/images/carousel1.jpg" alt="MY ALT TEXT"/>
         <h2 class="subtitle has-text-centered">
           First image description.
         </h2>
@@ -205,7 +245,7 @@
   </div>
 </div>
 </div>
-</section>
+</section> -->
 <!-- End image carousel -->
 
 
