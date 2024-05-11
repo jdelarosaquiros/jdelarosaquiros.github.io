@@ -245,121 +245,52 @@
           <p>
             As for how exactly the score is calculated, it basically combines the probabilities of all three tokens to create something akin to a confidence score of the answer. Since the score is based on the probabilities of the tokens, most if not all answers will have a different score even if their reflection tokens are the same. In my experience, this method provides a fairly accurate assessment of the generation because the probabilities of these tokens tend to be higher when the model knows the answer, and they are usually lower when the model is unsure or hallucinates. Also, this score does not have a high correlation with the overall probability of the generated tokens. During my experiments, I found that the overall probability of the generated tokens wasn’t an accurate indicator of the quality of answer, and it led to a much lower performance.         
           </p>
-          <img src="static/images/score_calculation.png" alt="SELF-RAG" class="blend-img-background center-image" width="600">
+          <img src="static/images/score_calculation.png" alt="Reflection Score Calculation" class="blend-img-background center-image" width="600">
         </div>
       </div>
     </div>
   </div>
 </section>
-  
-<!-- End paper abstract -->
-<!--   <div class="level-set has-text-justified">
-            <p>
-             In this paper, we identify a vulnerability in fine-tuned models, wherein the pre-fine-tuning (Pre-FT) weights, i.e., the model weights before the fine-tuning stage, can be recovered using a small number of models fine-tuned via low-rank adaptation (LoRA).
-             Generative modeling consists of two steps:
-             </p><ol>
-              <li>Pre-training on unsafe data.</li>
-              <li>Alignment and safety fine-tuning.</li>
-            </ol>
-            Recovering the original pre-fine-tuning unsafe weights, is implicitly assumed to be impossible. We demonstrate that this safety assumption is often false.
-          <p></p>
-        </div>
 
-        </div> -->
+<section class="section hero small">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <div class="content has-text-justified">
+          <p>
+            Below is a table comparing its accuracy with the following models:
 
-<!-- Image carousel -->
-<!-- <section class="hero is-small">
-  <div class="hero-body">
-    <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-       <div class="item"> -->
-        <!-- Your image here -->
-<!--         <img src="static/images/carousel1.jpg" alt="MY ALT TEXT"/>
-        <h2 class="subtitle has-text-centered">
-          First image description.
-        </h2>
-      </div>
-  </div>
-</div>
-</div>
-</section> -->
-<!-- End image carousel -->
-
-
-
-
-<!-- Youtube video -->
-<section class="hero is-small is-light">
-  <div class="hero-body">
-    <div class="container">
-      <!-- Paper video. -->
-      <h2 class="title is-3">Video Presentation</h2>
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          
-          <div class="publication-video">
-            <!-- Youtube embed code here -->
-            <iframe src="https://www.youtube.com/embed/JkaxUblCGz0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-          </div>
+            <ul>
+              <li>No Retrieval Models
+                <ul>
+                  <li></li>Llama2 7B, 13B</li>
+                  <li></li>Alpaca 7B, 13B: An instruction-tuned model</li>
+                  <li></li>CoVE65B: Iteratively prompts Llama2 65B to refine output</li>
+                </ul>
+              </li>
+              <li>Standard RAG Models
+                <ul>
+                  <li></li>Llama2 7B, 13B</li>
+                  <li></li>Alpaca 7B, 13B: An instruction-tuned model</li>
+                  <li></li>Llama2-FT: Fine-tuned on all training data they use without the reflection tokens or retrieved passages</li>
+                  <li></li>Ret-ChatGPT: ChatGPT with retrieval</li>
+                  <li></li>Ret-Llama2-chat: Llama2-chat with retrieval</li>
+                </ul>
+              </li>
+              <li>Models Instruct-tuned with Retrieved Text
+                <ul>
+                  <li></li>SAIL instruction-tune an LM on the Alpaca with retrieved examples</li>
+                  <li></li>Toolformer pre-trained to do API calls and use returned text</li>
+                </ul>
+              </li>
+            </ul>
+          </p>
+          <img src="static/images/reflection_tokens.png" alt="Results" class="blend-img-background center-image">
         </div>
       </div>
     </div>
   </div>
 </section>
-<!-- End youtube video -->
-
-
-<!-- Video carousel -->
-<section class="hero is-small">
-  <div class="hero-body">
-    <div class="container">
-      <h2 class="title is-3">Another Carousel</h2>
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-video1">
-          <video poster="" id="video1" autoplay controls muted loop height="100%">
-            <!-- Your video file here -->
-            <source src="static/videos/carousel1.mp4"
-            type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-video2">
-          <video poster="" id="video2" autoplay controls muted loop height="100%">
-            <!-- Your video file here -->
-            <source src="static/videos/carousel2.mp4"
-            type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-video3">
-          <video poster="" id="video3" autoplay controls muted loop height="100%">\
-            <!-- Your video file here -->
-            <source src="static/videos/carousel3.mp4"
-            type="video/mp4">
-          </video>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- End video carousel -->
-
-
-
-
-
-
-<!-- Paper poster -->
-<section class="hero is-small is-light">
-  <div class="hero-body">
-    <div class="container">
-      <h2 class="title">Poster</h2>
-
-      <iframe  src="static/pdfs/sample.pdf" width="100%" height="550">
-          </iframe>
-        
-      </div>
-    </div>
-  </section>
-<!--End paper poster -->
 
 
 <!--BibTex citation -->
